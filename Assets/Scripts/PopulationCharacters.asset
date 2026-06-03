@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: PopulationCharacters
   m_EditorClassIdentifier: 
   Characters:
-  - {fileID: 6582382388608970027, guid: 2d6693d7c89572b4cbeb2e5b3d72a12c, type: 3}
-  - {fileID: 6582382388608970027, guid: e8748d2eb07ad3040a703e7688af206a, type: 3}
-  - {fileID: 6582382388608970027, guid: 5e1e303e90bc86b4cbffe9231695c366, type: 3}
-  - {fileID: 6582382388608970027, guid: 24af14a2ec49313499b8e400cff89e35, type: 3}
-  - {fileID: 6582382388608970027, guid: 45198270ab3b67a4785213a9b36b098f, type: 3}
+  - {fileID: 436788730180787948, guid: e3f0571c6b92668469b4577322afe63b, type: 3}
+  - {fileID: 7753865188155858501, guid: 69882f7fb7dfd9d40b71eb358d5563a6, type: 3}
+  - {fileID: 8682669646332082024, guid: ebe391955fa1dd74d8a862a811e82597, type: 3}
+  - {fileID: 6418896613148702997, guid: 4085ae840fcfc384290ba0c078526ca8, type: 3}
+  - {fileID: 273390982589608670, guid: d3b575acb47cd6740aaf45f6d3be7cf4, type: 3}
+  - {fileID: 4782582978188320839, guid: 62aceea0105fad7418c62717e490fd73, type: 3}
+  - {fileID: 4706196490527431435, guid: 5375d655d1f68bc4b946dc2342fc5a47, type: 3}
