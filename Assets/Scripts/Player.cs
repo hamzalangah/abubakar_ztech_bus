@@ -1,8 +1,10 @@
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
+using System.Reflection;
 using System.Collections;
 using SWS;
+using DG.Tweening;
 
 [System.Serializable]
 public class PassangersClass
@@ -19,7 +21,7 @@ public class Player : MonoBehaviour
 
     public List<GameObject> Seats, OccupiedSeats;
 
-    public GameObject gateCamera, busDoor;
+    public GameObject busDoor, Rcccam;
 
     [Header("Pick & Drop Parkings")]
     public GameObject[] PickPoints;
@@ -32,6 +34,10 @@ public class Player : MonoBehaviour
     [Header("Pick & Drop Positions")]
     public Transform[] PickStopPos;
     public Transform[] DropStopPos;
+
+    private FieldInfo orbitXField;
+    private FieldInfo orbitYField;
+    private Component rccCameraComponent;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -42,6 +48,8 @@ public class Player : MonoBehaviour
         StartCoroutine(SetPassangersAnim());
 
         if (ui == null) ui = UIManager.instance;
+        InitializeRCCCameraReflection();
+
     }
     void ActiveSitPassanger()
     {
@@ -108,11 +116,23 @@ public class Player : MonoBehaviour
 
     IEnumerator PickPassangers()
     {
+
+        RCC_Camera cam = Rcccam.GetComponent<RCC_Camera>();
+        if (cam != null)
+        {
+            cam.cameraMode = RCC_Camera.CameraMode.TPS;
+        }
+
         int totalPassangers = passangers[LevelSelection.LevelNo].PickPassangers.Length;
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1f);
 
-        gateCamera.SetActive(true);
+        float originalX = GetOrbitX();
+        float originalY = GetOrbitY();
+        DOTween.To(() => GetOrbitX(), x => SetOrbitX(x), -162f, 1f);
+        DOTween.To(() => GetOrbitY(), y => SetOrbitY(y), -8f, 1f);
+
+        //gateCamera.SetActive(true);
 
         yield return new WaitForSeconds(3f);
         busDoor.GetComponent<Animator>().SetBool("IsOpen", true);
@@ -124,6 +144,11 @@ public class Player : MonoBehaviour
             passangers[LevelSelection.LevelNo].PickPassangers[pick].GetComponent<Animator>().SetBool("isWalking", true);
             yield return new WaitForSeconds(1f);
         }
+
+        yield return new WaitForSeconds(7f);
+
+        DOTween.To(() => GetOrbitX(), x => SetOrbitX(x), originalX, 1f);
+        DOTween.To(() => GetOrbitY(), y => SetOrbitY(y), originalY, 1f);
     }
 
     IEnumerator DropPassangers()
@@ -133,8 +158,11 @@ public class Player : MonoBehaviour
         //int dropTotal = Random.Range(2, DropPassnagers.Count);
 
         yield return new WaitForSeconds(2f);
-        gateCamera.SetActive(true);
-
+        //gateCamera.SetActive(true);
+        float originalX = GetOrbitX();
+        float originalY = GetOrbitY();
+        DOTween.To(() => GetOrbitX(), x => SetOrbitX(x), -162f, 1f);
+        DOTween.To(() => GetOrbitY(), y => SetOrbitY(y), -8f, 1f);
         yield return new WaitForSeconds(3f);
         busDoor.GetComponent<Animator>().SetBool("IsOpen", true);
 
@@ -184,13 +212,14 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(2f);
         UIManager.instance.Controls.SetActive(true);
 
-        gateCamera.SetActive(false);
+        //gateCamera.SetActive(false);
 
         rb.linearDamping = 0.01f;
 
         DropArrows[LevelSelection.LevelNo].SetActive(true);
 
         DropPoints[LevelSelection.LevelNo].SetActive(true);
+
 
         StartCoroutine(WatchScenePanel());
 
@@ -200,5 +229,49 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(10f);
         ui.watchScenePanel.SetActive(true);
         Time.timeScale = 0f;
+    }
+    private void InitializeRCCCameraReflection()
+    {
+        if (Rcccam != null)
+        {
+            rccCameraComponent = Rcccam.GetComponentInParent<RCC_Camera>() ?? Rcccam.GetComponent("RCC_Camera");
+            if (rccCameraComponent != null)
+            {
+                System.Type cameraType = rccCameraComponent.GetType();
+                BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+                orbitXField = cameraType.GetField("orbitX", flags) ?? cameraType.GetField("OrbitX", flags) ?? cameraType.GetField("tpsRotation", flags);
+                orbitYField = cameraType.GetField("orbitY", flags) ?? cameraType.GetField("OrbitY", flags) ?? cameraType.GetField("tpsTilt", flags);
+            }
+        }
+    }
+    private float GetOrbitX()
+    {
+        if (orbitXField != null && rccCameraComponent != null)
+        {
+            return (float)orbitXField.GetValue(rccCameraComponent);
+        }
+        return 0f;
+    }
+    private float GetOrbitY()
+    {
+        if (orbitYField != null && rccCameraComponent != null)
+        {
+            return (float)orbitYField.GetValue(rccCameraComponent);
+        }
+        return 0f;
+    }
+    private void SetOrbitX(float value)
+    {
+        if (orbitXField != null && rccCameraComponent != null)
+        {
+            orbitXField.SetValue(rccCameraComponent, value);
+        }
+    }
+    private void SetOrbitY(float value)
+    {
+        if (orbitYField != null && rccCameraComponent != null)
+        {
+            orbitYField.SetValue(rccCameraComponent, value);
+        }
     }
 }
