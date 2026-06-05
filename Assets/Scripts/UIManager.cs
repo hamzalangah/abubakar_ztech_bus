@@ -4,6 +4,7 @@ public class UIManager : MonoBehaviour
 {
     public static UIManager instance;
     public GameObject WinPanel, LoadingPanel, LossPanel, watchScenePanel;
+    public GameObject Controls;
 
     void Awake()
     {

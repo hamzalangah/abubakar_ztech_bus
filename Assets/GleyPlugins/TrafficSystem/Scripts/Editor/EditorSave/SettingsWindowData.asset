@@ -15,11 +15,11 @@ MonoBehaviour:
   drawWaypoints: 1
   drawLaneChange: 1
   createRoadSave:
-    viewOtherRoads: 0
+    viewOtherRoads: 1
     viewRoadsSettings:
-      viewLanes: 0
-      viewWaypoints: 0
-      viewLaneChanges: 0
+      viewLanes: 1
+      viewWaypoints: 1
+      viewLaneChanges: 1
   viewRoadsSave:
     viewRoadsSettings:
       viewLanes: 0
@@ -34,7 +34,7 @@ MonoBehaviour:
   roadDefaults:
     nrOfLanes: 2
     laneWidth: 7
-    waypointDistance: 6
+    waypointDistance: 4
   roadColors:
     textColor: {r: 1, g: 1, b: 1, a: 1}
     roadColor: {r: 0, g: 1, b: 0, a: 1}

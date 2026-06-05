@@ -7,7 +7,7 @@ using SWS;
 [System.Serializable]
 public class PassangersClass
 {
-    public GameObject[] PickPassangers;
+    public GameObject[] PickPassangers, DropPassnagers;
 }
 public class Player : MonoBehaviour
 {
@@ -17,7 +17,7 @@ public class Player : MonoBehaviour
     public PassangersClass[] passangers;
     private Rigidbody rb;
 
-    public List<GameObject> Seats, DropPassnagers;
+    public List<GameObject> Seats, OccupiedSeats;
 
     public GameObject gateCamera, busDoor;
 
@@ -76,6 +76,7 @@ public class Player : MonoBehaviour
             other.gameObject.SetActive(false);
             PickArrows[LevelSelection.LevelNo].SetActive(false);
 
+            UIManager.instance.Controls.SetActive(false);
             StartCoroutine(PickPassangers());
         }
         else if (other.gameObject.CompareTag("DropPoint"))
@@ -87,6 +88,7 @@ public class Player : MonoBehaviour
 
             other.gameObject.SetActive(false);
             DropArrows[LevelSelection.LevelNo].SetActive(false);
+            UIManager.instance.Controls.SetActive(false);
 
             StartCoroutine(DropPassangers());
         }
@@ -98,6 +100,7 @@ public class Player : MonoBehaviour
             transform.rotation = DropStopPos[LevelSelection.LevelNo].transform.rotation;
 
             other.gameObject.SetActive(false);
+            UIManager.instance.Controls.SetActive(false);
 
             StartCoroutine(ParkedBus());
         }
@@ -125,7 +128,9 @@ public class Player : MonoBehaviour
 
     IEnumerator DropPassangers()
     {
-        int dropTotal = Random.Range(2, 10);
+        int totalPassangers = OccupiedSeats.Count;
+
+        //int dropTotal = Random.Range(2, DropPassnagers.Count);
 
         yield return new WaitForSeconds(2f);
         gateCamera.SetActive(true);
@@ -134,16 +139,18 @@ public class Player : MonoBehaviour
         busDoor.GetComponent<Animator>().SetBool("IsOpen", true);
 
         yield return new WaitForSeconds(2f);
-        for (int drop = 0; drop < dropTotal; drop++)
+        for (int drop = 0; drop < totalPassangers; drop++)
         {
-            int sit = Random.Range(0, DropPassnagers.Count);
-            DropPassnagers[sit].SetActive(true);
-            Seats[sit].SetActive(false);
+            int sit = Random.Range(0, passangers[LevelSelection.LevelNo].DropPassnagers.Length);
+            passangers[LevelSelection.LevelNo].DropPassnagers[sit].SetActive(true);
 
-            DropPassnagers[sit].GetComponent<splineMove>().enabled = true;
-            DropPassnagers[sit].GetComponent<Animator>().SetBool("isWalking", true);
+            OccupiedSeats[drop].SetActive(false);
 
-            DropPassnagers.RemoveAt(sit);
+
+            passangers[LevelSelection.LevelNo].DropPassnagers[sit].GetComponent<splineMove>().enabled = true;
+            passangers[LevelSelection.LevelNo].DropPassnagers[sit].GetComponent<Animator>().SetBool("isWalking", true);
+
+            //DropPassnagers.RemoveAt(sit);
 
             yield return new WaitForSeconds(1f);
         }
@@ -162,6 +169,7 @@ public class Player : MonoBehaviour
 
         int sit = Random.Range(0, Seats.Count);
         Seats[sit].SetActive(true);
+        OccupiedSeats.Add(Seats[sit]);
         Seats.RemoveAt(sit);
 
         if (pass == passangers[LevelSelection.LevelNo].PickPassangers.Length - 1)
@@ -174,6 +182,8 @@ public class Player : MonoBehaviour
         busDoor.GetComponent<Animator>().SetBool("IsOpen", false);
 
         yield return new WaitForSeconds(2f);
+        UIManager.instance.Controls.SetActive(true);
+
         gateCamera.SetActive(false);
 
         rb.linearDamping = 0.01f;

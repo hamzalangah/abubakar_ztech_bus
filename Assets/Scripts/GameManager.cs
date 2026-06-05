@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
     public Transform[] Positions;
     public GameObject[] Players, Levels;
 
+    public Material skybox;
     private void Awake()
     {
         if (instance == null) instance = this;
@@ -53,6 +54,7 @@ public class GameManager : MonoBehaviour
         ui.LoadingPanel.SetActive(true);
         yield return new WaitForSeconds(FirstSceneDuration[LevelSelection.LevelNo]);
         ui.LoadingPanel.SetActive(false);
+        UIManager.instance.Controls.SetActive(true);
     }
     
 
@@ -91,5 +93,15 @@ public class GameManager : MonoBehaviour
     public void Home()
     {
         SceneManager.LoadScene("MainMenu");
+    }
+    [SerializeField] private float rotationSpeed = 1.0f;
+
+    void Update()
+    {
+        // Calculate the new rotation based on time and speed
+        float currentRotation = Time.time * rotationSpeed;
+
+        // Apply the rotation value to the global skybox material
+        RenderSettings.skybox.SetFloat("_Rotation", currentRotation);
     }
 }
