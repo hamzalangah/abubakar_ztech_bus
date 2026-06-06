@@ -38,6 +38,9 @@ public class Player : MonoBehaviour
     private FieldInfo orbitXField;
     private FieldInfo orbitYField;
     private Component rccCameraComponent;
+
+    float originalX;
+    float originalY;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -127,8 +130,9 @@ public class Player : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
 
-        float originalX = GetOrbitX();
-        float originalY = GetOrbitY();
+        originalX = GetOrbitX();
+        originalY = GetOrbitY();
+
         DOTween.To(() => GetOrbitX(), x => SetOrbitX(x), -162f, 1f);
         DOTween.To(() => GetOrbitY(), y => SetOrbitY(y), -8f, 1f);
 
@@ -144,11 +148,6 @@ public class Player : MonoBehaviour
             passangers[LevelSelection.LevelNo].PickPassangers[pick].GetComponent<Animator>().SetBool("isWalking", true);
             yield return new WaitForSeconds(1f);
         }
-
-        yield return new WaitForSeconds(7f);
-
-        DOTween.To(() => GetOrbitX(), x => SetOrbitX(x), originalX, 1f);
-        DOTween.To(() => GetOrbitY(), y => SetOrbitY(y), originalY, 1f);
     }
 
     IEnumerator DropPassangers()
@@ -220,9 +219,10 @@ public class Player : MonoBehaviour
 
         DropPoints[LevelSelection.LevelNo].SetActive(true);
 
+        DOTween.To(() => GetOrbitX(), x => SetOrbitX(x), originalX, 1f);
+        DOTween.To(() => GetOrbitY(), y => SetOrbitY(y), originalY, 1f);
 
         StartCoroutine(WatchScenePanel());
-
     }
     IEnumerator WatchScenePanel()
     {

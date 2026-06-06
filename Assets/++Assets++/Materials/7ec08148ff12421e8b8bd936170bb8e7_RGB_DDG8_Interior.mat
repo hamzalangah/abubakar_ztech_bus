@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: 7ec08148ff12421e8b8bd936170bb8e7_RGB_DDG8_Interior
-  m_Shader: {fileID: 4800000, guid: c5dc64499c09db947ade2eef19cb2a1a, type: 3}
+  m_Shader: {fileID: 10, guid: 0000000000000000f000000000000000, type: 0}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -43,6 +43,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Illum:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 2800000, guid: 795f91779aefddb40b1d50afd1f20fef, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -65,6 +69,7 @@ Material:
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
+    - _Emission: 1
     - _Glossiness: 0.5
     - _Metallic: 0
     - _Mode: 0
