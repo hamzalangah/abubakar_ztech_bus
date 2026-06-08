@@ -30,6 +30,8 @@ public class Player : MonoBehaviour
     [Header("Directional Arrows")]
     public GameObject[] PickArrows;
     public GameObject[] DropArrows;
+    public GameObject[] PickCheckPoints;
+    public GameObject[] DropCheckPoints;
 
     [Header("Pick & Drop Positions")]
     public Transform[] PickStopPos;
@@ -41,6 +43,7 @@ public class Player : MonoBehaviour
 
     float originalX;
     float originalY;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -86,6 +89,7 @@ public class Player : MonoBehaviour
 
             other.gameObject.SetActive(false);
             PickArrows[LevelSelection.LevelNo].SetActive(false);
+            PickCheckPoints[LevelSelection.LevelNo].SetActive(false);
 
             UIManager.instance.Controls.SetActive(false);
             StartCoroutine(PickPassangers());
@@ -99,6 +103,7 @@ public class Player : MonoBehaviour
 
             other.gameObject.SetActive(false);
             DropArrows[LevelSelection.LevelNo].SetActive(false);
+            DropCheckPoints[LevelSelection.LevelNo].SetActive(false);
             UIManager.instance.Controls.SetActive(false);
 
             StartCoroutine(DropPassangers());
@@ -133,8 +138,8 @@ public class Player : MonoBehaviour
         originalX = GetOrbitX();
         originalY = GetOrbitY();
 
-        DOTween.To(() => GetOrbitX(), x => SetOrbitX(x), -140f, 5f);
-        DOTween.To(() => GetOrbitY(), y => SetOrbitY(y), -8f, 5f);
+        DOTween.To(() => GetOrbitX(), x => SetOrbitX(x), -162f, 3f);
+        DOTween.To(() => GetOrbitY(), y => SetOrbitY(y), -12f, 3f);
 
         //gateCamera.SetActive(true);
 
@@ -160,8 +165,8 @@ public class Player : MonoBehaviour
         //gateCamera.SetActive(true);
         float originalX = GetOrbitX();
         float originalY = GetOrbitY();
-        DOTween.To(() => GetOrbitX(), x => SetOrbitX(x), -162f, 1f);
-        DOTween.To(() => GetOrbitY(), y => SetOrbitY(y), -8f, 1f);
+        DOTween.To(() => GetOrbitX(), x => SetOrbitX(x), -162f, 3f);
+        DOTween.To(() => GetOrbitY(), y => SetOrbitY(y), -12f, 3f);
         yield return new WaitForSeconds(3f);
         busDoor.GetComponent<Animator>().SetBool("IsOpen", true);
 
@@ -216,11 +221,12 @@ public class Player : MonoBehaviour
         rb.linearDamping = 0.01f;
 
         DropArrows[LevelSelection.LevelNo].SetActive(true);
+        DropCheckPoints[LevelSelection.LevelNo].SetActive(true);
 
         DropPoints[LevelSelection.LevelNo].SetActive(true);
 
-        DOTween.To(() => GetOrbitX(), x => SetOrbitX(x), originalX, 1f);
-        DOTween.To(() => GetOrbitY(), y => SetOrbitY(y), originalY, 1f);
+        DOTween.To(() => GetOrbitX(), x => SetOrbitX(x), originalX, 3f);
+        DOTween.To(() => GetOrbitY(), y => SetOrbitY(y), originalY, 3f);
 
         StartCoroutine(WatchScenePanel());
     }
