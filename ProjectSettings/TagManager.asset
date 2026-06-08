@@ -8,6 +8,13 @@ TagManager:
   - PickPoint
   - DropPoint
   - ParkingArea
+  - pick
+  - Interactable
+  - point_warehouse
+  - Barrier
+  - Complete
+  - cone
+  - checkpoint
   layers:
   - Default
   - TransparentFX
