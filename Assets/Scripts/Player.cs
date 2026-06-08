@@ -133,8 +133,8 @@ public class Player : MonoBehaviour
         originalX = GetOrbitX();
         originalY = GetOrbitY();
 
-        DOTween.To(() => GetOrbitX(), x => SetOrbitX(x), -162f, 1f);
-        DOTween.To(() => GetOrbitY(), y => SetOrbitY(y), -8f, 1f);
+        DOTween.To(() => GetOrbitX(), x => SetOrbitX(x), -140f, 5f);
+        DOTween.To(() => GetOrbitY(), y => SetOrbitY(y), -8f, 5f);
 
         //gateCamera.SetActive(true);
 
