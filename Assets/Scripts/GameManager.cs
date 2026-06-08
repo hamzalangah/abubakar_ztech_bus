@@ -40,9 +40,10 @@ public class GameManager : MonoBehaviour
 
         if (ui == null) ui = UIManager.instance;
 
-        passangers[LevelSelection.LevelNo].Bus_Passangers[VehicleSelection.vehicle_index].SetActive(true);
-
         StartCoroutine(StartScene());
+
+        if (LevelSelection.LevelNo > 4) return;
+        passangers[LevelSelection.LevelNo].Bus_Passangers[VehicleSelection.vehicle_index].SetActive(true);
     }
     void ActiveLevels()
     {
@@ -56,7 +57,7 @@ public class GameManager : MonoBehaviour
         ui.LoadingPanel.SetActive(false);
         UIManager.instance.Controls.SetActive(true);
     }
-    
+
 
     public void WathSceneYesorNO()
     {

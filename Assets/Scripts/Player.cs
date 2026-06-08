@@ -68,6 +68,7 @@ public class Player : MonoBehaviour
     }
     IEnumerator SetPassangersAnim()
     {
+        if (LevelSelection.LevelNo > 4) yield break;
         yield return new WaitForSeconds(2);
         int totalPassangers = passangers[LevelSelection.LevelNo].PickPassangers.Length;
 
