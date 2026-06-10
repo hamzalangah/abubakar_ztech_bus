@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using SWS;
 
 [System.Serializable]
 public class BusPassangers
@@ -13,11 +14,13 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
     private UIManager ui;
 
+    public GameObject[] FirstScene, MidScene, LastScene;
+
+    [Header("CutScene Data")]
+    public GameObject[] FirstScenePassangers;
     public float[] FirstSceneDuration, MidSceneDuration, LastSceneDuration;
     public Transform[] Positions;
     public GameObject[] Players, Levels;
-
-    public Material skybox;
     private void Awake()
     {
         if (instance == null) instance = this;
@@ -52,13 +55,26 @@ public class GameManager : MonoBehaviour
 
     IEnumerator StartScene()
     {
-        ui.LoadingPanel.SetActive(true);
+        StartCoroutine(PickingPassangers());
+        FirstScene[LevelSelection.LevelNo].SetActive(true);
         yield return new WaitForSeconds(FirstSceneDuration[LevelSelection.LevelNo]);
-        ui.LoadingPanel.SetActive(false);
+        FirstScene[LevelSelection.LevelNo].SetActive(false);
         UIManager.instance.Controls.SetActive(true);
     }
+    IEnumerator PickingPassangers()
+    {
+        if (LevelSelection.LevelNo == 0)
+        {
+            yield return new WaitForSeconds(3f);
+            for (int i = 0; i < FirstScenePassangers.Length; i++)
+            {
+                FirstScenePassangers[i].GetComponent<splineMove>().enabled = true;
+                FirstScenePassangers[i].GetComponent<Animator>().SetBool("isWalking", true);
+                yield return new WaitForSeconds(1f);
 
-
+            }
+        }
+    }
     public void WathSceneYesorNO()
     {
         Time.timeScale = 1f;
@@ -96,13 +112,4 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("MainMenu");
     }
     [SerializeField] private float rotationSpeed = 1.0f;
-
-    void Update()
-    {
-        // Calculate the new rotation based on time and speed
-        float currentRotation = Time.time * rotationSpeed;
-
-        // Apply the rotation value to the global skybox material
-        RenderSettings.skybox.SetFloat("_Rotation", currentRotation);
-    }
 }
