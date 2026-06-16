@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
 using SWS;
+using DG.Tweening;
 
 [System.Serializable]
 public class BusPassangers
@@ -15,6 +16,7 @@ public class GameManager : MonoBehaviour
     private UIManager ui;
 
     public GameObject[] FirstScene, MidScene, LastScene;
+    public GameObject MagicScene, Piegon;
 
     [Header("CutScene Data")]
     public GameObject[] FirstScenePassangers;
@@ -75,10 +77,34 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-    public void WathSceneYesorNO()
+    public void WathSceneYesorNO(bool check)
+    {
+        StartCoroutine(ShowMagicScene(check));
+    }
+    IEnumerator ShowMagicScene(bool check)
     {
         Time.timeScale = 1f;
         ui.watchScenePanel.SetActive(false);
+
+        if (check)
+        {
+            ui.Controls.SetActive(false);
+            MagicScene.SetActive(true);
+        }
+        else
+        {
+            yield return new WaitForSeconds(10f);
+            ui.Controls.SetActive(false);
+        }
+
+        yield return new WaitForSeconds(4.4f);
+
+        Piegon.GetComponent<splineMove>().enabled = true;
+
+        yield return new WaitForSeconds(5.6f);
+
+        MagicScene.SetActive(false);
+        ui.Controls.SetActive(true);
     }
     public void LevelComplete()
     {
