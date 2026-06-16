@@ -16,7 +16,12 @@ public class GameManager : MonoBehaviour
     private UIManager ui;
 
     public GameObject[] FirstScene, MidScene, LastScene;
-    public GameObject MagicScene, Piegon;
+
+    [Header("CutScenes Assets")]
+    public GameObject MagicScene;
+    public GameObject DrumScene;
+    public GameObject FerrisWheelScene;
+    public GameObject Piegon;
 
     [Header("CutScene Data")]
     public GameObject[] FirstScenePassangers;
@@ -77,9 +82,25 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+
     public void WathSceneYesorNO(bool check)
     {
-        StartCoroutine(ShowMagicScene(check));
+        switch (LevelSelection.LevelNo)
+        {
+            case 0:
+                StartCoroutine(ShowMagicScene(check));
+                break;
+            case 1:
+                StartCoroutine(ShwoDrumScene(check));
+                break;
+            case 2:
+                StartCoroutine(ShowFerrisWheelScene(check));
+                break;
+
+            default:
+                Debug.Log("No Scene Available");
+                break;
+        }
     }
     IEnumerator ShowMagicScene(bool check)
     {
@@ -104,6 +125,48 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(5.6f);
 
         MagicScene.SetActive(false);
+        ui.Controls.SetActive(true);
+    }
+    IEnumerator ShwoDrumScene(bool check)
+    {
+        Time.timeScale = 1f;
+        ui.watchScenePanel.SetActive(false);
+
+        if (check)
+        {
+            ui.Controls.SetActive(false);
+            DrumScene.SetActive(true);
+        }
+        else
+        {
+            yield return new WaitForSeconds(10f);
+            ui.Controls.SetActive(false);
+        }
+
+        yield return new WaitForSeconds(12f);
+
+        DrumScene.SetActive(false);
+        ui.Controls.SetActive(true);
+    }
+    IEnumerator ShowFerrisWheelScene(bool check)
+    {
+        Time.timeScale = 1f;
+        ui.watchScenePanel.SetActive(false);
+
+        if (check)
+        {
+            ui.Controls.SetActive(false);
+            FerrisWheelScene.SetActive(true);
+        }
+        else
+        {
+            yield return new WaitForSeconds(10f);
+            ui.Controls.SetActive(false);
+        }
+
+        yield return new WaitForSeconds(15f);
+
+        FerrisWheelScene.SetActive(false);
         ui.Controls.SetActive(true);
     }
     public void LevelComplete()

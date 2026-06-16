@@ -233,6 +233,7 @@ public class Player : MonoBehaviour
     }
     IEnumerator WatchScenePanel()
     {
+        if (LevelSelection.LevelNo > 2) yield break;
         yield return new WaitForSeconds(10f);
         ui.watchScenePanel.SetActive(true);
         Time.timeScale = 0f;
