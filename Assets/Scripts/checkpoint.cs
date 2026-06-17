@@ -1,10 +1,10 @@
-using UnityEngine;
 using System.Collections;
+using UnityEngine;
 
 public class checkpoint : MonoBehaviour
 {
     public GameObject[] ReleaseObjects;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    public GameObject Sprites;
     void Start()
     {
 
@@ -13,29 +13,23 @@ public class checkpoint : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            GetComponent<SpriteRenderer>().enabled = false;
-            GetComponent<BoxCollider>().enabled = false;
-
+            Sprites.SetActive(false);
             StartCoroutine(Hidethis());
         }
     }
     IEnumerator Hidethis()
     {
-        yield return new WaitForSeconds(1f);
         foreach (GameObject things in ReleaseObjects)
         {
-            if (ReleaseObjects != null)
-            {
-                things.SetActive(true);
-            }
+            things.SetActive(true);
         }
-        yield return new WaitForSeconds(10f);
-        this.gameObject.SetActive(false);
-    }
-    // Update is called once per frame
-    void Update()
-    {
+        yield return new WaitForSeconds(4);
 
+        foreach (GameObject things in ReleaseObjects)
+        {
+            things.SetActive(false);
 
+        }
     }
 }
+
